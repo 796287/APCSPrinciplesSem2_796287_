@@ -1,21 +1,58 @@
+//Connor Garratt
 
-function selectionSort(items){
-    var len = data.length,
-        min;
-    for (i=0; i < len; i++){
-        //set minimum to this position
-        min = i;
-        //check the rest of the array to see if anything is smaller
-        for (j=i+1; j < len; j++){
-            if (items[j] < items[min]){
-                min = j;
-            }
-        }
-        //if the minimum isn't in the position, swap it
-        if (i != min){
-            swap(items, i, min);
-        }
+
+//global variables
+
+//measurements
+var compares = 0;
+var swaps = 0;
+//timer for sorting method
+var millisecondEnd;
+var milliseondStart;
+var difference;
+//setting up 20000 numbers to be sorted
+var data = [];
+var dataNumbers = 20000
+//array of sorted data
+var sorted = [];
+//unsorted array of data
+var unsorted = [];
+
+function setup() {
+  for(var i = 0; i < dataNumbers; i++){
+    data.push(random(0, 2000));
+  }
+  //copy data to unsorted array
+  arrayCopy(data, unsorted, data.length);
+  organize()
+}
+
+function draw() {
+}
+
+function organize(){
+  millisecondStart = millis();
+  for(var j = 0; j < data.length; j++){
+    var min = unsorted[0]
+    var minIndex = 0
+    for (var i = 1; i < unsorted.length; i++){
+      compares++;
+      if(unsorted[i] < min){
+        minIndex = i;
+        min = unsorted[i];
+        swaps++;
+      }
     }
-
-    return items;
+    sorted.push(min);
+    unsorted.splice(minIndex, 1);
+  }
+  millisecondEnd = millis();
+  //prints final sorted array
+  difference = millisecondEnd - millisecondStart;
+  console.log(sorted);
+  console.log(millisecondStart + " start");
+  console.log(millisecondEnd + " end");
+  console.log(difference + " difference");
+  console.log(swaps + " swaps");
+  console.log(compares + " compares");
 }

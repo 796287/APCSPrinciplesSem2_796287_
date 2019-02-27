@@ -1,80 +1,115 @@
 
 //Connor Garratt
 //January 18, 2019
-//Crime JSON
+//population JSON
 
 //  Global variables
 
 var data = [];
-var sortBy = "males";
-var bigTotal = 0;
-
 function preload(){
   data = loadJSON("population.json");
 }
 
+
 function setup() {
-  var cnv = createCanvas(800, 800);
+  //canvas
+  var cnv = createCanvas(1000, 2250);
   cnv.position((windowWidth-width)/2, 30);
-  //background color
   background(5, 5, 5);
-  fill(200, 30, 150);
-  bubble();
-  represent();
+  //text size and location
+  textSize(10);
+  textAlign(CENTER, CENTER);
+
+  organize();
 }
+
 
 function draw() {
 }
-//sorting with bubble sort
-function bubble(){
+
+
+function organize(){
   var temp;
-  if(sortBy = "total"){
-    for (var i = 1; i < data.countrydata.length; i++){
-      for(var j = i; j > 0; j--){
-        if(data.countrydata[j].total < data.countrydata[j-1].total){
-          temp = data.countrydata[j];
-          data.countrydata[j] = data.countrydata[j-1];
-          data.countrydata[j-1] = temp;
-        }
+  for (var i = 1; i < data.countrydata.length; i++){
+    for(var j = i; j > 0; j--){
+
+      if(data.countrydata[j].country < data.countrydata[j-1].country){
+        temp = data.countrydata[j];
+        data.countrydata[j] = data.countrydata[j-1];
+        data.countrydata[j-1] = temp;
       }
     }
   }
-  //sorting the data by females
-  if(sortBy = "females"){
-    for (var i = 1; i < data.countrydata.length; i++){
-      for(var j = i; j > 0; j--){
-        if(data.countrydata[j].females < data.countrydata[j-1].females){
-          temp = data.countrydata[j];
-          data.countrydata[j] = data.countrydata[j-1];
-          data.countrydata[j-1] = temp;
-        }
-      }
-    }
-  }
-  //sorting the data by males
-  if(sortBy = "males"){
-    for (var i = 1; i < data.countrydata.length; i++){
-      for(var j = i; j > 0; j--){
-        if(data.countrydata[j].males < data.countrydata[j-1].males){
-          temp = data.countrydata[j];
-          data.countrydata[j] = data.countrydata[j-1];
-          data.countrydata[j-1] = temp;
-        }
-      }
-    }
-  }
-  console.log(data);
+  drawWords();
+  check();
+  bars();
 }
-//represent the json data on a pie graph
-function represent(){
+
+
+function drawWords(){
+  textAlign(LEFT);
+  //titles of all of the sections
+  fill(255, 255, 255);
+  text("Countries", 100, 10);
+  text("Totals", 300, 10);
+  text("Males", 500, 10);
+  text("Females", 700, 10);
+  fill(70, 170, 0);
   for(var i = 1; i < data.countrydata.length; i++){
-    bigTotal = bigTotal + data.countrydata[i].total;
+    text(data.countrydata[i].country, 100, 10 + (i*10));
   }
-  var lastAngle = 0;
-  for(var i = 0; i < data.countrydata.length; i ++){
-    var angle = ((data.countrydata[i].total / bigTotal) * (2 * PI));
-    fill(190, 200, 10*i);
-    arc(300, 300, 500, 500, lastAngle, lastAngle + angle);
-    lastAngle += angle
+  //representation of the total data
+  fill(200, 55, 0);
+  for(var i = 1; i < data.countrydata.length; i++){
+    text(data.countrydata[i].total, 300, 10 + (i*10));
+  }
+  //representation of male data
+  fill(10, 80, 60);
+  for(var i = 1; i < data.countrydata.length; i++){
+    text(data.countrydata[i].males, 500, 10 + (i*10));
+  }
+  //representation of female
+  fill(20, 70, 2);
+  for(var i = 1; i < data.countrydata.length; i++){
+    text(data.countrydata[i].females, 700, 10 + (i*10));
+  }
+}
+
+
+function check(){
+  for(var i = 1; i < data.countrydata.length; i++){
+    console.log(data.countrydata[i].total);
+  }
+}
+
+function bars(){
+  var allTotal = 0;
+  var allMale = 0;
+  var allFemale = 0;
+  for(var i = 1; i < data.countrydata.length; i++){
+    allTotal = allTotal + data.countrydata[i].total;
+    allMale = allMale + data.countrydata[i].males;
+    allFemale = allFemale + data.countrydata[i].females;
+  }
+  //total data in bar graph
+  for(var i = 1; i < data.countrydata.length; i++){
+    var size = (data.countrydata[i].total / allTotal) * (100);
+    console.log(size + "size");
+    fill(200, 55, 0);
+    rect(350, 10 + (i*10), size*5, 10);
+  }
+  //the male data in bar graph
+  for(var i = 1; i < data.countrydata.length; i++){
+    var size = (data.countrydata[i].males / allMale) * (100);
+    console.log(size + "size");
+    fill(10, 80, 60);
+    rect(550, 10 + (i*10), size*5, 10);
+  }
+  //the female data in bar graph
+  for(var i = 1; i < data.countrydata.length; i++){
+    var size = (data.countrydata[i].females / allFemale) * (100);
+    console.log(size + "size");
+    fill(20, 70, 2);
+    rect(750, 10 + (i*10), size*5, 10);
   }
 }
